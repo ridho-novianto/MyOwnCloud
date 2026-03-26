@@ -114,6 +114,18 @@ CREATE TABLE notifications (
     INDEX idx_user_read (user_id, is_read)
 ) ENGINE=InnoDB;
 
+-- Notes table
+CREATE TABLE notes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    content MEDIUMTEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_user (user_id)
+) ENGINE=InnoDB;
+
 -- Insert default admin user (password: admin123)
 INSERT INTO users (username, email, password_hash, role, storage_quota) VALUES
 ('Administrator', 'admin@myowncloud.local', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 10737418240);

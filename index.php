@@ -38,7 +38,7 @@ if (in_array($page, $publicPages) && isLoggedIn()) {
 }
 
 // Allowed pages
-$allowedPages = ['login', 'register', 'dashboard', 'tasks', 'links', 'files', 'admin', 'profile', 'notifications'];
+$allowedPages = ['login', 'register', 'dashboard', 'tasks', 'links', 'files', 'notes', 'admin', 'profile', 'notifications'];
 if (!in_array($page, $allowedPages)) {
     $page = 'dashboard';
 }

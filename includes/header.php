@@ -55,6 +55,10 @@ $currentPage = $_GET['page'] ?? 'dashboard';
                     <i class="fas fa-folder-open"></i>
                     <span>File Manager</span>
                 </a>
+                <a href="?page=notes" class="nav-item <?= $currentPage === 'notes' ? 'active' : '' ?>">
+                    <i class="fas fa-sticky-note"></i>
+                    <span>Notes</span>
+                </a>
             </div>
 
             <?php if (isAdmin()): ?>
