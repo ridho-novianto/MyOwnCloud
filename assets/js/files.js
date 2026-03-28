@@ -305,3 +305,96 @@ async function handleDropMove(e) {
     
     draggedItem = null;
 }
+
+// --- File Converter ---
+const CONVERT_FORMATS = {
+    audio: [
+        { value: 'mp3', label: 'Audio MP3 (.mp3)' },
+        { value: 'wav', label: 'Audio WAV (.wav)' },
+        { value: 'ogg', label: 'Audio OGG (.ogg)' },
+        { value: 'aac', label: 'Audio AAC (.aac)' }
+    ],
+    video: [
+        { value: 'mp4', label: 'Video MP4 (.mp4)' },
+        { value: 'webm', label: 'Video WebM (.webm)' },
+        { value: 'mp3', label: 'Extract Audio MP3 (.mp3)' }
+    ],
+    image: [
+        { value: 'pdf', label: 'PDF Document (.pdf)' },
+        { value: 'jpg', label: 'Gambar JPEG (.jpg)' },
+        { value: 'png', label: 'Gambar PNG (.png)' },
+        { value: 'webp', label: 'Gambar WebP (.webp)' }
+    ],
+    document: [
+        { value: 'pdf', label: 'PDF Document (.pdf)' }
+    ]
+};
+
+const CONVERT_INFO = {
+    audio: 'Konversi menggunakan FFmpeg',
+    video: 'Konversi menggunakan FFmpeg',
+    image: 'Konversi gambar menggunakan PHP GD',
+    document: 'Konversi dokumen menggunakan LibreOffice'
+};
+
+function getFileCategory(mime) {
+    if (mime.startsWith('audio/')) return 'audio';
+    if (mime.startsWith('video/')) return 'video';
+    if (mime.startsWith('image/')) return 'image';
+    return 'document';
+}
+
+function openConvertModal(id, mime) {
+    document.getElementById('convertFileId').value = id;
+    document.getElementById('convertFileMime').value = mime || '';
+
+    const category = getFileCategory(mime || '');
+    const formats = CONVERT_FORMATS[category] || CONVERT_FORMATS.document;
+    const select = document.getElementById('convertFormat');
+
+    select.innerHTML = '';
+    formats.forEach(f => {
+        const opt = document.createElement('option');
+        opt.value = f.value;
+        opt.textContent = f.label;
+        select.appendChild(opt);
+    });
+
+    const infoDiv = document.getElementById('convertInfo');
+    const infoText = document.getElementById('convertInfoText');
+    if (CONVERT_INFO[category]) {
+        infoDiv.style.display = 'block';
+        infoText.textContent = CONVERT_INFO[category];
+    } else {
+        infoDiv.style.display = 'none';
+    }
+
+    openModal('convertModal');
+}
+
+async function handleConvert(e) {
+    e.preventDefault();
+    const id = document.getElementById('convertFileId').value;
+    const format = document.getElementById('convertFormat').value;
+    const btn = document.getElementById('btnConvert');
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Proses...';
+
+    try {
+        const res = await apiCall('files', { action: 'convert', id, format });
+        if (res.success) {
+            showToast('Konversi berhasil! File baru: ' + (res.filename || format.toUpperCase()));
+            location.reload();
+        } else {
+            showToast(res.error || 'Gagal mengkonversi', 'error');
+        }
+    } catch (err) {
+        showToast('Terjadi kesalahan jaringan', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-exchange-alt"></i> Konversi';
+        closeModal();
+    }
+}
+

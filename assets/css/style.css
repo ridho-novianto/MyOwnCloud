@@ -210,9 +210,6 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
 /* === Mobile Sidebar === */
 .sidebar-toggle {
     display: none;
-    position: fixed;
-    top: 16px; left: 16px;
-    z-index: 101;
     width: 40px; height: 40px;
     border-radius: 10px;
     background: var(--bg-card);
@@ -222,11 +219,13 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
     cursor: pointer;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    z-index: 101;
 }
 
 @media (max-width: 768px) {
     .sidebar { transform: translateX(-100%); }
-    .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
+    .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); z-index: 200; }
     .sidebar-toggle { display: flex; }
     .main-content { margin-left: 0 !important; width: 100% !important; }
 }
@@ -1517,18 +1516,361 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
 }
 
 @media (max-width: 768px) {
-    .content-body { padding: 16px; }
-    .top-header { padding: 12px 16px; }
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .links-grid { grid-template-columns: 1fr; }
-    .file-grid { grid-template-columns: repeat(2, 1fr); }
-    .filter-row { flex-direction: column; align-items: flex-start; }
-    .task-counters { overflow-x: auto; flex-wrap: nowrap; }
+    /* -- Base Layout -- */
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); z-index: 200; }
+    .sidebar-toggle { display: flex; }
+    .main-content { margin-left: 0 !important; width: 100% !important; }
+
+    .content-body { padding: 16px 12px; }
+
+    /* -- Header -- */
+    .top-header {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Make sure toggle is clickable inline */
+    .sidebar-toggle {
+        position: relative;
+        z-index: 101;
+        flex-shrink: 0;
+    }
+
+    .page-title {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .page-title h2 { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .page-title i { font-size: 15px; }
+
+    .header-actions {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end; /* Align single buttons to the right */
+        gap: 8px;
+        flex-wrap: nowrap; /* Keep search and button side-by-side */
+    }
+
+    /* Isolate fix for Notes page so button stays on the top row */
+    .page-notes .header-actions {
+        width: auto;
+        order: 2;
+    }
+
+    .header-actions .search-box {
+        flex: 1;
+        min-width: 0;
+        margin-top: 0;
+    }
+
+    .header-actions .btn-primary {
+        flex-shrink: 0;
+        position: relative;
+        z-index: 50;
+    }
+
+    .header-actions .header-greeting {
+        width: 100%;
+        flex-shrink: 0;
+        margin-top: 8px;
+    }
+
+    .search-box input { font-size: 12px; }
+
+    .header-greeting {
+        font-size: 11px;
+        flex-direction: column !important;
+        gap: 6px !important;
+        align-items: flex-start !important;
+    }
+
+    .header-greeting > div:first-child {
+        border-right: none !important;
+        padding-right: 0 !important;
+        font-size: 0.95rem !important;
+    }
+
+    .btn { padding: 8px 14px; font-size: 12px; }
+    .btn-primary { white-space: nowrap; }
+
+    /* -- Stats Grid -- */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .stat-card { padding: 14px; gap: 10px; }
+    .stat-icon { width: 38px; height: 38px; font-size: 16px; }
+    .stat-number { font-size: 22px; }
+    .stat-label { font-size: 11px; }
+    .stat-detail { font-size: 10px; }
+
+    /* -- Quick Actions -- */
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .quick-action-card { padding: 16px 10px; gap: 8px; }
+    .quick-action-card i { font-size: 18px; }
+    .quick-action-card span { font-size: 12px; }
+
+    /* -- Charts -- */
+    .charts-grid { grid-template-columns: 1fr; gap: 12px; }
+    .chart-card { padding: 14px; }
+    .chart-card h3 { font-size: 13px; }
+    .chart-container { height: 200px; }
+
+    /* -- Bottom Grid -- */
+    .bottom-grid { grid-template-columns: 1fr; gap: 12px; }
+    .info-card { padding: 14px; }
+    .info-card-header h3 { font-size: 13px; }
+    .info-list-item { gap: 8px; padding: 6px 0; }
+    .info-title { font-size: 12px; }
+    .info-meta { font-size: 11px; }
+
+    /* -- Filter Tabs -- */
+    .filter-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px;
+        gap: 6px;
+        scrollbar-width: none;
+    }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+    .filter-tab {
+        flex-shrink: 0;
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+
+    /* -- Filter Row -- */
+    .filter-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .filter-actions {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    .filter-actions .select-styled {
+        flex: 1;
+        min-width: 0;
+        font-size: 11px;
+    }
+
+    /* -- Task Items -- */
+    .task-counters {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        scrollbar-width: none;
+        gap: 8px;
+        padding-bottom: 4px;
+    }
+    .task-counters::-webkit-scrollbar { display: none; }
+    .counter-pill { flex-shrink: 0; padding: 6px 12px; font-size: 12px; }
+
+    .task-item {
+        padding: 12px;
+        gap: 10px;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    .task-content h4 { font-size: 13px; }
+    .task-desc { font-size: 11px; }
+    .task-meta {
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+    .task-meta .badge { font-size: 9px; padding: 2px 6px; }
+    .task-meta .deadline-tag { font-size: 10px; }
+    .task-meta .tag { font-size: 10px; }
+    .task-actions {
+        flex-direction: column;
+        gap: 4px;
+        flex-shrink: 0;
+    }
+    .task-actions .action-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 11px;
+    }
+
+    /* -- Link Cards -- */
+    .links-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .link-card { padding: 14px; }
+    .link-card-header { gap: 10px; margin-bottom: 8px; }
+    .link-icon { width: 36px; height: 36px; font-size: 15px; }
+    .link-info h4 { font-size: 13px; }
+    .link-url { font-size: 11px; }
+    .link-desc { font-size: 11px; margin-bottom: 8px; }
+    .link-card-footer {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+        padding-top: 8px;
+    }
+
+    /* -- File Manager -- */
+    .storage-bar-container { padding: 12px; margin-bottom: 14px; }
+    .storage-info { font-size: 12px; }
+
+    .upload-zone { padding: 24px 12px; margin-bottom: 14px; }
+    .upload-zone-content i { font-size: 28px; margin-bottom: 8px; }
+    .upload-zone-content p { font-size: 12px; }
+    .upload-zone-content small { font-size: 11px; }
+
+    .file-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .breadcrumb { font-size: 12px; flex-wrap: wrap; }
+    .file-toolbar-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+    }
+    .file-toolbar-actions .btn { font-size: 11px; padding: 6px 10px; }
+
+    .file-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .file-item { padding: 10px; gap: 8px; }
+    .file-icon { width: 44px; height: 44px; font-size: 20px; }
+    .file-name {
+        font-size: 11px;
+        max-width: 100%;
+    }
+    .file-meta { font-size: 10px; }
+    .file-info { text-align: center; min-width: 0; width: 100%; overflow: hidden; }
+    .file-actions { gap: 4px; }
+    .file-actions .action-btn { width: 28px; height: 28px; font-size: 10px; }
+
+    .file-grid.list-view .file-item { padding: 10px; }
+    .file-grid.list-view .file-icon { width: 32px; height: 32px; font-size: 14px; }
+
+    /* -- Notes -- */
+    .notes-container {
+        flex-direction: column;
+        height: auto;
+    }
+    .notes-sidebar {
+        width: 100%;
+        max-height: 250px;
+        margin-bottom: 12px;
+        flex-shrink: 0;
+    }
+    .notes-editor-area {
+        min-height: 400px;
+        flex: 1 1 auto;
+    }
+    .editor-toolbar {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 14px;
+    }
+    .editor-title-input {
+        width: 100%;
+        font-size: 1rem;
+    }
+    .editor-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    /* -- Profile -- */
+    .profile-container { grid-template-columns: 1fr; }
+    .profile-card { padding: 20px; }
+    .profile-edit-card { padding: 16px; }
+
+    /* -- Modals -- */
+    .modal {
+        width: 96%;
+        max-width: none;
+        max-height: 94vh;
+    }
+    .modal-content {
+        padding: 16px;
+        border-radius: var(--radius);
+    }
+    .modal-header { margin-bottom: 14px; padding-bottom: 12px; }
+    .modal-header h3 { font-size: 15px; }
+    .modal-footer { margin-top: 14px; padding-top: 12px; }
+    .modal-footer .btn { flex: 1; justify-content: center; }
+
+    .preview-body img { max-height: 300px; }
+
+    /* -- Forms -- */
+    .form-row { grid-template-columns: 1fr; gap: 12px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea { padding: 9px 12px; font-size: 13px; }
+    .form-group label { font-size: 11px; }
+
+    /* -- Admin Table -- */
+    .admin-tabs { gap: 6px; }
+    .admin-tab { padding: 6px 12px; font-size: 12px; }
+    .data-table th { padding: 8px 10px; font-size: 10px; }
+    .data-table td { padding: 10px; font-size: 12px; }
+
+    /* -- Toast (center bottom on mobile) -- */
+    .toast-container {
+        left: 12px;
+        right: 12px;
+        bottom: 16px;
+    }
+    .toast { min-width: auto; width: 100%; font-size: 12px; padding: 10px 14px; }
+
+    /* -- Empty State -- */
+    .empty-state { padding: 40px 16px; }
+    .empty-state i { font-size: 36px; }
+    .empty-state h3 { font-size: 14px; }
+
+    /* -- Prevent icon squishing -- */
+    .file-icon, .stat-icon, .link-icon, .user-avatar, .logo-icon {
+        flex-shrink: 0;
+    }
+
+    /* -- Notification Page -- */
+    .notification-container { padding: 0; }
+    .notification-card { padding: 20px; }
+    .notif-icon-large { width: 60px; height: 60px; font-size: 28px; }
+    .notification-hero h2 { font-size: 17px; }
 }
 
 @media (max-width: 480px) {
-    .stats-grid { grid-template-columns: 1fr; }
+    .content-body { padding: 12px 8px; }
+
+    .stats-grid { grid-template-columns: 1fr; gap: 8px; }
+    .quick-actions { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
     .file-grid { grid-template-columns: 1fr; }
-    .quick-actions { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
+
+    .stat-card { flex-direction: row; align-items: center; }
+
+    .top-header { padding: 10px 12px; }
+    .page-title h2 { font-size: 14px; }
+
+    .task-item { padding: 10px; gap: 8px; }
+
+    .link-card { padding: 12px; }
+
+    .btn { padding: 7px 10px; font-size: 11px; }
+
+    .modal { width: 98%; }
+    .modal-content { padding: 14px; }
 }
+

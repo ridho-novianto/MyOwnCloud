@@ -99,4 +99,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Dashboard Clock
+    const clockEl = document.getElementById('dashboardClock');
+    if (clockEl) {
+        const updateClock = () => {
+            const now = new Date();
+            clockEl.textContent = now.toLocaleTimeString('id-ID', { hour12: false });
+        };
+        setInterval(updateClock, 1000);
+        updateClock();
+    }
 });

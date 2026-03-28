@@ -4,7 +4,7 @@
  */
 $pageTitle = 'Aktifkan Notifikasi';
 $pageIcon = 'bell';
-$pageScripts = ['push.js'];
+$pageScripts = ['push.js?v=2'];
 require_once __DIR__ . '/../includes/header.php';
 ?>
 

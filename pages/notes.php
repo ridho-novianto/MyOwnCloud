@@ -8,6 +8,27 @@ $headerButton = ['text' => 'Catatan Baru', 'onclick' => 'newNote()', 'id' => 'ad
 $pageScripts = ['notes.js'];
 require_once __DIR__ . '/../includes/header.php';
 ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    tinymce.init({
+        selector: '#noteContent',
+        skin: 'oxide-dark',
+        content_css: 'dark',
+        height: '100%',
+        promotion: false,
+        branding: false,
+        menubar: true,
+        plugins: 'advlist autolink lists link image charmap preview anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking save table directionality emoticons template',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen preview print | insertfile image media template link anchor codesample | ltr rtl',
+        setup: function(editor) {
+            editor.on('input change', function() {
+                if (typeof markUnsaved === 'function') markUnsaved();
+            });
+        }
+    });
+});
+</script>
 
 <style>
 .notes-container {
@@ -96,12 +117,16 @@ require_once __DIR__ . '/../includes/header.php';
     background: transparent;
     border: none;
     color: #e0e6ed;
-    padding: 25px;
-    font-family: 'Consolas', 'Courier New', monospace;
+    padding: 0;
     font-size: 1.05rem;
     resize: none;
     outline: none;
     line-height: 1.7;
+}
+/* Ensure the editor container takes full height minus toolbar */
+.tox-tinymce {
+    border: none !important;
+    border-radius: 0 0 12px 12px !important;
 }
 .note-textarea::placeholder {
     color: rgba(255,255,255,0.2);
@@ -126,6 +151,76 @@ require_once __DIR__ . '/../includes/header.php';
 }
 .editor-empty h3 {
     font-weight: 500;
+}
+@media (max-width: 768px) {
+    .notes-container {
+        flex-direction: column;
+        height: auto;
+        min-height: calc(100vh - 160px);
+        gap: 10px;
+    }
+    .notes-sidebar {
+        width: 100%;
+        max-height: 200px;
+        margin-bottom: 0;
+        flex-shrink: 0;
+        border-radius: 8px;
+    }
+    .note-item {
+        padding: 10px 14px;
+    }
+    .note-title {
+        font-size: 0.9rem;
+        margin-bottom: 3px;
+    }
+    .note-date {
+        font-size: 0.7rem;
+    }
+    .notes-editor-area {
+        min-height: 450px;
+        flex: 1 1 auto;
+        border-radius: 8px;
+    }
+    .editor-toolbar {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 12px;
+    }
+    .editor-title-input {
+        width: 100%;
+        font-size: 1rem;
+        order: 1;
+    }
+    .editor-actions {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 8px;
+        order: 2;
+    }
+    .editor-actions .btn {
+        font-size: 11px;
+        padding: 6px 10px;
+    }
+    .editor-empty i {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+    .editor-empty h3 {
+        font-size: 0.95rem;
+    }
+    .editor-empty p {
+        font-size: 0.8rem;
+    }
+    /* TinyMCE mobile fixes */
+    .tox-tinymce {
+        min-height: 668px !important;
+    }
+    .tox .tox-toolbar__group {
+        flex-wrap: wrap !important;
+    }
+    .tox .tox-menubar {
+        flex-wrap: wrap !important;
+    }
 }
 </style>
 

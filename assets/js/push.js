@@ -53,7 +53,7 @@ async function enableNotifications() {
         }
 
         // Register service worker
-        const registration = await navigator.serviceWorker.register(APP_URL + '/sw.js');
+        const registration = await navigator.serviceWorker.register(APP_URL + '/sw.js?v=2');
         await navigator.serviceWorker.ready;
 
         // Get VAPID key
@@ -107,15 +107,42 @@ async function disableNotifications() {
     }
 }
 
-function testPushNotification() {
+async function testPushNotification() {
     if (Notification.permission === 'granted') {
-        new Notification('MyOwnCloud', {
-            body: 'Test notifikasi berhasil! Notifikasi deadline akan dikirim 7 hari sebelumnya.',
-            icon: APP_URL + '/assets/icons/icon-192.png',
-            badge: APP_URL + '/assets/icons/icon-72.png',
-            tag: 'test-notification'
-        });
-        showToast('Test notifikasi dikirim!');
+        try {
+            const registration = await navigator.serviceWorker.getRegistration();
+            if (registration) {
+                await registration.showNotification('MyOwnCloud', {
+                    body: 'Test notifikasi berhasil! Notifikasi deadline akan dikirim 7 hari sebelumnya.',
+                    icon: APP_URL + '/assets/icons/icon-192.png',
+                    badge: APP_URL + '/assets/icons/icon-72.png',
+                    tag: 'test-notification',
+                    vibrate: [200, 100, 200],
+                    requireInteraction: true,
+                    actions: [
+                        { action: 'open', title: 'Buka' },
+                        { action: 'dismiss', title: 'Tutup' }
+                    ]
+                });
+                showToast('Test notifikasi dikirim!');
+            } else {
+                // Fallback: register SW first then retry
+                const reg = await navigator.serviceWorker.register(APP_URL + '/sw.js?v=3');
+                await navigator.serviceWorker.ready;
+                await reg.showNotification('MyOwnCloud', {
+                    body: 'Test notifikasi berhasil!',
+                    icon: APP_URL + '/assets/icons/icon-192.png',
+                    badge: APP_URL + '/assets/icons/icon-72.png',
+                    tag: 'test-notification',
+                    vibrate: [200, 100, 200],
+                    requireInteraction: true
+                });
+                showToast('Test notifikasi dikirim!');
+            }
+        } catch (err) {
+            console.error('Test notification failed:', err);
+            showToast('Gagal mengirim test notifikasi: ' + err.message, 'error');
+        }
     }
 }
 

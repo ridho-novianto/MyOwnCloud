@@ -2,9 +2,9 @@
 /**
  * Cron: Check Deadlines and Send Push Notifications
  * 
- * Run daily: 0 9 * * * php /var/www/html/myowncloud/cron/notify_deadlines.php
+ * Run every 4 hours (atau hourly): 0 */4 * * * php /var/www/html/myowncloud/cron/notify_deadlines.php
  * 
- * Checks for tasks with deadlines within 7 days and sends push notifications.
+ * Checks for tasks with deadlines within 7 days and sends push notifications every 4 hours.
  * Uses web-push-php library if available, otherwise stores notifications in DB.
  */
 require_once __DIR__ . '/../config.php';
@@ -34,10 +34,10 @@ foreach ($tasks as $task) {
     $days = daysUntil($task['deadline']);
     $message = "Task \"{$task['title']}\" deadline dalam {$days} hari ({$task['deadline']})";
 
-    // Check if already notified today
+    // Check if notified in the last 4 hours
     $check = $db->prepare("
         SELECT id FROM notifications 
-        WHERE task_id = ? AND user_id = ? AND DATE(sent_at) = CURDATE()
+        WHERE task_id = ? AND user_id = ? AND sent_at >= DATE_SUB(NOW(), INTERVAL 4 HOUR)
     ");
     $check->execute([$task['id'], $task['uid']]);
     if ($check->fetch()) {

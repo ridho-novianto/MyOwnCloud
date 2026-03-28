@@ -2,25 +2,25 @@
     "name": "MyOwnCloud",
     "short_name": "MyOwnCloud",
     "description": "Personal Cloud Workspace - File, Task & Link Manager",
-    "start_url": "/myowncloud/?page=dashboard",
+    "start_url": "./?page=dashboard",
     "display": "standalone",
     "background_color": "#0a0e1a",
     "theme_color": "#0a0e1a",
     "orientation": "any",
     "icons": [
         {
-            "src": "/myowncloud/assets/icons/icon-72.png",
+            "src": "./assets/icons/icon-72.png",
             "sizes": "72x72",
             "type": "image/png"
         },
         {
-            "src": "/myowncloud/assets/icons/icon-192.png",
+            "src": "./assets/icons/icon-192.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
-            "src": "/myowncloud/assets/icons/icon-512.png",
+            "src": "./assets/icons/icon-512.png",
             "sizes": "512x512",
             "type": "image/png"
         }

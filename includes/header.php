@@ -21,7 +21,7 @@ $currentPage = $_GET['page'] ?? 'dashboard';
     <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
-<body>
+<body class="page-<?= htmlspecialchars($currentPage) ?>">
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -105,14 +105,13 @@ $currentPage = $_GET['page'] ?? 'dashboard';
         </div>
     </aside>
 
-    <!-- Mobile sidebar toggle -->
-    <button class="sidebar-toggle" id="sidebarToggle">
-        <i class="fas fa-bars"></i>
-    </button>
-
     <!-- Main Content -->
     <main class="main-content" id="mainContent">
         <div class="top-header">
+            <!-- Mobile sidebar toggle (inside header flow) -->
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
             <div class="page-title">
                 <i class="fas fa-<?= $pageIcon ?? 'th-large' ?>"></i>
                 <h2><?= sanitize($pageTitle ?? 'Dashboard') ?></h2>
@@ -130,8 +129,13 @@ $currentPage = $_GET['page'] ?? 'dashboard';
                 </button>
                 <?php endif; ?>
                 <?php if ($currentPage === 'dashboard'): ?>
-                <div class="header-greeting">
-                    Halo, <?= sanitize($user['username']) ?> <i class="fas fa-user-circle"></i>
+                <div class="header-greeting" style="display: flex; align-items: center; gap: 15px;">
+                    <div id="dashboardClock" style="font-family: 'Consolas', monospace; font-size: 1.1rem; color: var(--cyan); font-weight: 600; padding-right: 15px; border-right: 1px solid var(--border-color);">
+                        --:--:--
+                    </div>
+                    <div>
+                        Halo, <?= sanitize($user['username']) ?> <i class="fas fa-user-circle"></i>
+                    </div>
                 </div>
                 <?php endif; ?>
             </div>

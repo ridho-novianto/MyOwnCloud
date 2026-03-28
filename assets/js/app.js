@@ -1,8 +1,8 @@
 /**
  * MyOwnCloud - Core Application JS
  */
-const APP_URL = document.querySelector('meta[name="theme-color"]') ? 
-    window.location.origin + '/myowncloud' : '/myowncloud';
+const manifestLink = document.querySelector('link[rel="manifest"]');
+const APP_URL = manifestLink ? manifestLink.href.replace(/\/manifest\.json$/, '') : window.location.origin;
 
 // Sidebar toggle
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,16 +11,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const main = document.getElementById('mainContent');
 
     if (toggle) {
-        toggle.addEventListener('click', () => {
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             sidebar.classList.toggle('open');
             main.classList.toggle('shifted');
         });
     }
 
-    // Close sidebar on mobile when clicking outside
+    // Close sidebar on mobile when clicking outside (but not on the toggle)
     if (main) {
-        main.addEventListener('click', () => {
+        main.addEventListener('click', (e) => {
             if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+                // Don't close if clicking the toggle button itself
+                if (e.target.closest('.sidebar-toggle')) return;
                 sidebar.classList.remove('open');
                 main.classList.remove('shifted');
             }
@@ -157,14 +160,29 @@ async function handleLogout(e) {
 }
 
 // Test notification
-function testNotification() {
+async function testNotification() {
     if ('Notification' in window) {
         if (Notification.permission === 'granted') {
-            new Notification('MyOwnCloud', {
-                body: 'Notifikasi berfungsi dengan baik!',
-                icon: APP_URL + '/assets/icons/icon-192.png'
-            });
-            showToast('Test notifikasi dikirim!');
+            try {
+                // Use Service Worker showNotification (works on mobile)
+                let registration = await navigator.serviceWorker.getRegistration();
+                if (!registration) {
+                    registration = await navigator.serviceWorker.register(APP_URL + '/sw.js?v=3');
+                    await navigator.serviceWorker.ready;
+                }
+                await registration.showNotification('MyOwnCloud', {
+                    body: 'Notifikasi berfungsi dengan baik!',
+                    icon: APP_URL + '/assets/icons/icon-192.png',
+                    badge: APP_URL + '/assets/icons/icon-72.png',
+                    vibrate: [200, 100, 200],
+                    tag: 'test-dashboard',
+                    requireInteraction: true
+                });
+                showToast('Test notifikasi dikirim!');
+            } catch (err) {
+                console.error('Notification error:', err);
+                showToast('Gagal mengirim notifikasi: ' + err.message, 'error');
+            }
         } else if (Notification.permission !== 'denied') {
             Notification.requestPermission().then(p => {
                 if (p === 'granted') testNotification();

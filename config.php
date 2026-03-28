@@ -4,14 +4,14 @@
  */
 
 // Database
-define('DB_HOST', 'localhost');
+define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'myowncloud');
 define('DB_USER', 'root');
-define('DB_PASS', 'Vianto06');
+define('DB_PASS', 'Vianto06.');
 
 // App
 define('APP_NAME', 'MyOwnCloud');
-define('APP_URL', 'http://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/myowncloud');
+define('APP_URL', 'https://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') );
 define('APP_ROOT', __DIR__);
 define('UPLOAD_DIR', APP_ROOT . '/uploads');
 define('MAX_UPLOAD_SIZE', 100 * 1024 * 1024); // 100MB
@@ -21,8 +21,8 @@ define('DEFAULT_STORAGE_QUOTA', 1 * 1024 * 1024 * 1024); // 1GB
 define('SESSION_LIFETIME', 86400 * 7); // 7 days
 
 // VAPID keys for Push Notifications (generate your own at https://vapidkeys.com/)
-define('VAPID_PUBLIC_KEY', '');
-define('VAPID_PRIVATE_KEY', '');
+define('VAPID_PUBLIC_KEY', 'BGefBrMaoqJrXemyE4qPfVffptwENjK0iLYH7C9FOtufgwNpojmPuCmzcUele46ur3r5t9a2BdRNCNpC6JPykuc');
+define('VAPID_PRIVATE_KEY', '8xuwE5_XDTtnwaRU3PMjdPpPFI9DRAV9uAQLfgQ0_54');
 define('VAPID_SUBJECT', 'mailto:admin@myowncloud.local');
 
 // Timezone

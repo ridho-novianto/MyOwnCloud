@@ -89,7 +89,11 @@ function newNote() {
     
     currentNoteId = null;
     document.getElementById('noteTitle').value = '';
-    document.getElementById('noteContent').value = '';
+    if (typeof tinymce !== 'undefined' && tinymce.get('noteContent')) {
+        tinymce.get('noteContent').setContent('');
+    } else {
+        document.getElementById('noteContent').value = '';
+    }
     document.getElementById('btnDeleteNote').style.display = 'none';
     
     document.getElementById('editorEmptyState').style.display = 'none';
@@ -109,7 +113,11 @@ function openNote(id) {
     
     currentNoteId = parseInt(note.id);
     document.getElementById('noteTitle').value = note.title;
-    document.getElementById('noteContent').value = note.content;
+    if (typeof tinymce !== 'undefined' && tinymce.get('noteContent')) {
+        tinymce.get('noteContent').setContent(note.content || '');
+    } else {
+        document.getElementById('noteContent').value = note.content || '';
+    }
     document.getElementById('btnDeleteNote').style.display = 'inline-flex';
     
     document.getElementById('editorEmptyState').style.display = 'none';
@@ -120,7 +128,12 @@ function openNote(id) {
 
 async function saveNote(isAutoSave = false) {
     const title = document.getElementById('noteTitle').value.trim() || 'Catatan Tanpa Nama';
-    const content = document.getElementById('noteContent').value;
+    let content = '';
+    if (typeof tinymce !== 'undefined' && tinymce.get('noteContent')) {
+        content = tinymce.get('noteContent').getContent();
+    } else {
+        content = document.getElementById('noteContent').value;
+    }
     
     const action = currentNoteId ? 'update' : 'create';
     const payload = {

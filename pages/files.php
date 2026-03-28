@@ -191,6 +191,11 @@ $fileCount = count($files) + count($folders);
             </div>
         </div>
         <div class="file-actions">
+            <?php if (str_starts_with($file['mime_type'], 'audio/') || str_starts_with($file['mime_type'], 'video/') || str_starts_with($file['mime_type'], 'image/') || in_array($file['mime_type'], ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'text/plain', 'text/csv'])): ?>
+            <button class="action-btn" onclick="openConvertModal(<?= $file['id'] ?>, '<?= sanitize($file['mime_type']) ?>')" title="Konversi">
+                <i class="fas fa-exchange-alt"></i>
+            </button>
+            <?php endif; ?>
             <a href="<?= APP_URL ?>/?page=api/files&action=download&id=<?= $file['id'] ?>" class="action-btn" title="Download">
                 <i class="fas fa-download"></i>
             </a>
@@ -228,6 +233,34 @@ $fileCount = count($files) + count($folders);
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
                 <button type="submit" class="btn btn-primary">Buat</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Convert Modal -->
+<div class="modal" id="convertModal">
+    <div class="modal-content modal-sm">
+        <div class="modal-header">
+            <h3><i class="fas fa-exchange-alt" style="color:var(--cyan);margin-right:6px"></i> Konversi File</h3>
+            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <form id="convertForm" onsubmit="handleConvert(event)">
+            <input type="hidden" id="convertFileId">
+            <input type="hidden" id="convertFileMime">
+            <div class="form-group">
+                <label><i class="fas fa-file-export"></i> Format Tujuan</label>
+                <select id="convertFormat" class="select-styled" style="width:100%; border:1px solid var(--border-color); background:var(--bg-input); padding:10px; color:var(--text-primary); border-radius:var(--radius-sm);">
+                    <!-- Options populated dynamically by JS -->
+                </select>
+            </div>
+            <div id="convertInfo" style="background:var(--bg-input);border-radius:var(--radius-sm);padding:10px;margin-bottom:10px;font-size:12px;color:var(--text-muted);display:none;">
+                <i class="fas fa-info-circle" style="color:var(--cyan)"></i>
+                <span id="convertInfoText"></span>
+            </div>
+            <div class="modal-footer" style="margin-top:20px;">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+                <button type="submit" class="btn btn-primary" id="btnConvert"><i class="fas fa-exchange-alt"></i> Konversi</button>
             </div>
         </form>
     </div>
