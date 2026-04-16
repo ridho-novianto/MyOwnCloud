@@ -53,7 +53,7 @@ async function enableNotifications() {
         }
 
         // Register service worker
-        const registration = await navigator.serviceWorker.register(APP_URL + '/sw.js?v=2');
+        const registration = await navigator.serviceWorker.register(APP_URL + '/sw.js?v=5');
         await navigator.serviceWorker.ready;
 
         // Get VAPID key
@@ -110,13 +110,18 @@ async function disableNotifications() {
 async function testPushNotification() {
     if (Notification.permission === 'granted') {
         try {
+            // Send server-side push notification (works on mobile even when browser is backgrounded)
+            const serverRes = await apiCall('notifications', { action: 'test' });
+            console.log('[TestPush] Server response:', serverRes);
+            
+            // Also show a local notification as immediate feedback
             const registration = await navigator.serviceWorker.getRegistration();
             if (registration) {
                 await registration.showNotification('MyOwnCloud', {
-                    body: 'Test notifikasi berhasil! Notifikasi deadline akan dikirim 7 hari sebelumnya.',
+                    body: 'Test notifikasi lokal berhasil! Push server juga dikirim.',
                     icon: APP_URL + '/assets/icons/icon-192.png',
                     badge: APP_URL + '/assets/icons/icon-72.png',
-                    tag: 'test-notification',
+                    tag: 'test-local-notification',
                     vibrate: [200, 100, 200],
                     requireInteraction: true,
                     actions: [
@@ -124,21 +129,8 @@ async function testPushNotification() {
                         { action: 'dismiss', title: 'Tutup' }
                     ]
                 });
-                showToast('Test notifikasi dikirim!');
-            } else {
-                // Fallback: register SW first then retry
-                const reg = await navigator.serviceWorker.register(APP_URL + '/sw.js?v=3');
-                await navigator.serviceWorker.ready;
-                await reg.showNotification('MyOwnCloud', {
-                    body: 'Test notifikasi berhasil!',
-                    icon: APP_URL + '/assets/icons/icon-192.png',
-                    badge: APP_URL + '/assets/icons/icon-72.png',
-                    tag: 'test-notification',
-                    vibrate: [200, 100, 200],
-                    requireInteraction: true
-                });
-                showToast('Test notifikasi dikirim!');
             }
+            showToast(`Test notifikasi dikirim! ${serverRes.message || ''}`);
         } catch (err) {
             console.error('Test notification failed:', err);
             showToast('Gagal mengirim test notifikasi: ' + err.message, 'error');

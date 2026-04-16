@@ -1,0 +1,35 @@
+[16-Apr-2026 10:15:21 Asia/Jakarta] [Push] Success: https://fcm.googleapis.com/fcm/send/c_birHCXCKw:APA91bHpdMa5DY1zZZ7h5n40X69tO8n3bUjOFsRkScSTpqKLJfCzhyDhWfX6jOhrY4UOGxkvrh66MnQtYAFeiF63UnZaNpeSsX7c_VN_9GTwT76G2XvIr7s-Rd8jaCKqWICttq64MuNb
+[16-Apr-2026 10:15:21 Asia/Jakarta] [Push] Success: https://fcm.googleapis.com/fcm/send/fmUgO4AL9Vw:APA91bGHnhuN40jNA8-jmnjk8-tXkmvaXoxza2IvGX-DNZB7zNBjhorr001WBwsj5fqEvRcEBvOomW5h3ThKFBqiAKhUBTIecpP2zVDi0iUBrgkS14r-DiyHbvhzl2Yh_gmiv3L88ltW
+[16-Apr-2026 10:15:21 Asia/Jakarta] [Push] Success: https://updates.push.services.mozilla.com/wpush/v2/gAAAAABpxjyep0TvNODEe2yUW5NrrGss_aC0OrH68vmRlb9F4LfJ1MDCkBJf8aF8ea27p4EI3htmMqJrAD9EgJ2tE6HS5Jtf_LymCrrtfJiGLFQdeJ-CbLzWWHrAAFyzvpC74K_zNSITFRrwSVlYa2-r81iv2tlPOzc_WvsKeiAEJx2Skd003yg
+[16-Apr-2026 10:15:21 Asia/Jakarta] [Push] Failed (Client error: `POST https://fcm.googleapis.com/fcm/send/dx2tMLNZ1aU:APA91bF1w1GSv7B_JP6XvZ7mj4f2w5aEoqvNQEI2B6du2v2dw7XrbJ1h-f3S9PlUj3z2vhUTdccK1HTewEqGpUAJtehmTuljB-Sdw5OnRvLEv_ZYxQQNKpFjrjhLlr2sLEnc6ma9O9kC` resulted in a `410 Gone` response:
+push subscription has unsubscribed or expired.
+
+): https://fcm.googleapis.com/fcm/send/dx2tMLNZ1aU:APA91bF1w1GSv7B_JP6XvZ7mj4f2w5aEoqvNQEI2B6du2v2dw7XrbJ1h-f3S9PlUj3z2vhUTdccK1HTewEqGpUAJtehmTuljB-Sdw5OnRvLEv_ZYxQQNKpFjrjhLlr2sLEnc6ma9O9kC
+[16-Apr-2026 10:15:21 Asia/Jakarta] [Push] Removed invalid subscription: https://fcm.googleapis.com/fcm/send/dx2tMLNZ1aU:APA91bF1w1GSv7B_JP6XvZ7mj4f2w5aEoqvNQEI2B6du2v2dw7XrbJ1h-f3S9PlUj3z2vhUTdccK1HTewEqGpUAJtehmTuljB-Sdw5OnRvLEv_ZYxQQNKpFjrjhLlr2sLEnc6ma9O9kC
+[16-Apr-2026 10:15:21 Asia/Jakarta] [Push] Success: https://fcm.googleapis.com/fcm/send/eTa_0Cs8SSs:APA91bElIUwUvhxHeKQif7lWS3EP5-7dwofX_HGACw72Gq2TPxh82LmPzzVsUraoVJnpZfSSFAAip3dd0WanSlxiYh8kilrWS9roJgIwfzv6gCKu0K6LBWdWdvAlaRpF1WTqRORAfLKM
+[16-Apr-2026 10:15:21 Asia/Jakarta] [Push] Failed (Client error: `POST https://fcm.googleapis.com/fcm/send/ftMsFp3F9Co:APA91bEczzIIhCIWqj7BMnj-vIqJ843ADS0-JMGu3a5yYifTdpwoPwRKkJq2ep8GgxYm8UVBJxnKi6kUH8WupOcdchvwo8VANkfXye4Zi_4s8H_GNsKfCaLYXvrLyS_66C8kw2OtY7mr` resulted in a `410 Gone` response:
+push subscription has unsubscribed or expired.
+
+): https://fcm.googleapis.com/fcm/send/ftMsFp3F9Co:APA91bEczzIIhCIWqj7BMnj-vIqJ843ADS0-JMGu3a5yYifTdpwoPwRKkJq2ep8GgxYm8UVBJxnKi6kUH8WupOcdchvwo8VANkfXye4Zi_4s8H_GNsKfCaLYXvrLyS_66C8kw2OtY7mr
+[16-Apr-2026 10:15:21 Asia/Jakarta] [Push] Removed invalid subscription: https://fcm.googleapis.com/fcm/send/ftMsFp3F9Co:APA91bEczzIIhCIWqj7BMnj-vIqJ843ADS0-JMGu3a5yYifTdpwoPwRKkJq2ep8GgxYm8UVBJxnKi6kUH8WupOcdchvwo8VANkfXye4Zi_4s8H_GNsKfCaLYXvrLyS_66C8kw2OtY7mr
+[16-Apr-2026 10:20:03 Asia/Jakarta] [Push] Failed (Client error: `POST https://web.push.apple.com/QLJeRNrLvgGhy25Uj-UClkE_0zZ40OA5EzNjXCl2yW227xyMiDyT25WhhjGRxKR05Efqa7cnY4zz06l7L17ha3V7Pb2VndEAIt1L0NRrI_mrQnjoQPu4lRXl9eT6fsk2DhNf_Quga7J4M2RUDpj3HmobGeqkIQlW1gdftW8kMc4` resulted in a `403 Forbidden` response:
+{"reason":"BadJwtToken"}
+): https://web.push.apple.com/QLJeRNrLvgGhy25Uj-UClkE_0zZ40OA5EzNjXCl2yW227xyMiDyT25WhhjGRxKR05Efqa7cnY4zz06l7L17ha3V7Pb2VndEAIt1L0NRrI_mrQnjoQPu4lRXl9eT6fsk2DhNf_Quga7J4M2RUDpj3HmobGeqkIQlW1gdftW8kMc4
+[16-Apr-2026 10:20:03 Asia/Jakarta] [Push] Task notification (reminder) for task #21: sent to 0 device(s)
+[16-Apr-2026 10:20:04 Asia/Jakarta] [Push] Failed (Client error: `POST https://web.push.apple.com/QLJeRNrLvgGhy25Uj-UClkE_0zZ40OA5EzNjXCl2yW227xyMiDyT25WhhjGRxKR05Efqa7cnY4zz06l7L17ha3V7Pb2VndEAIt1L0NRrI_mrQnjoQPu4lRXl9eT6fsk2DhNf_Quga7J4M2RUDpj3HmobGeqkIQlW1gdftW8kMc4` resulted in a `403 Forbidden` response:
+{"reason":"BadJwtToken"}
+): https://web.push.apple.com/QLJeRNrLvgGhy25Uj-UClkE_0zZ40OA5EzNjXCl2yW227xyMiDyT25WhhjGRxKR05Efqa7cnY4zz06l7L17ha3V7Pb2VndEAIt1L0NRrI_mrQnjoQPu4lRXl9eT6fsk2DhNf_Quga7J4M2RUDpj3HmobGeqkIQlW1gdftW8kMc4
+[16-Apr-2026 10:20:04 Asia/Jakarta] [Push] Task notification (reminder) for task #22: sent to 0 device(s)
+[16-Apr-2026 10:20:04 Asia/Jakarta] [Push] Failed (Client error: `POST https://web.push.apple.com/QLJeRNrLvgGhy25Uj-UClkE_0zZ40OA5EzNjXCl2yW227xyMiDyT25WhhjGRxKR05Efqa7cnY4zz06l7L17ha3V7Pb2VndEAIt1L0NRrI_mrQnjoQPu4lRXl9eT6fsk2DhNf_Quga7J4M2RUDpj3HmobGeqkIQlW1gdftW8kMc4` resulted in a `403 Forbidden` response:
+{"reason":"BadJwtToken"}
+): https://web.push.apple.com/QLJeRNrLvgGhy25Uj-UClkE_0zZ40OA5EzNjXCl2yW227xyMiDyT25WhhjGRxKR05Efqa7cnY4zz06l7L17ha3V7Pb2VndEAIt1L0NRrI_mrQnjoQPu4lRXl9eT6fsk2DhNf_Quga7J4M2RUDpj3HmobGeqkIQlW1gdftW8kMc4
+[16-Apr-2026 10:20:04 Asia/Jakarta] [Push] Task notification (reminder) for task #23: sent to 0 device(s)
+[16-Apr-2026 10:20:04 Asia/Jakarta] [Push] Failed (Client error: `POST https://web.push.apple.com/QLJeRNrLvgGhy25Uj-UClkE_0zZ40OA5EzNjXCl2yW227xyMiDyT25WhhjGRxKR05Efqa7cnY4zz06l7L17ha3V7Pb2VndEAIt1L0NRrI_mrQnjoQPu4lRXl9eT6fsk2DhNf_Quga7J4M2RUDpj3HmobGeqkIQlW1gdftW8kMc4` resulted in a `403 Forbidden` response:
+{"reason":"BadJwtToken"}
+): https://web.push.apple.com/QLJeRNrLvgGhy25Uj-UClkE_0zZ40OA5EzNjXCl2yW227xyMiDyT25WhhjGRxKR05Efqa7cnY4zz06l7L17ha3V7Pb2VndEAIt1L0NRrI_mrQnjoQPu4lRXl9eT6fsk2DhNf_Quga7J4M2RUDpj3HmobGeqkIQlW1gdftW8kMc4
+[16-Apr-2026 10:20:05 Asia/Jakarta] [Push] Task notification (reminder) for task #24: sent to 0 device(s)
+[16-Apr-2026 10:21:19 Asia/Jakarta] [Push] Success: https://web.push.apple.com/QLJeRNrLvgGhy25Uj-UClkE_0zZ40OA5EzNjXCl2yW227xyMiDyT25WhhjGRxKR05Efqa7cnY4zz06l7L17ha3V7Pb2VndEAIt1L0NRrI_mrQnjoQPu4lRXl9eT6fsk2DhNf_Quga7J4M2RUDpj3HmobGeqkIQlW1gdftW8kMc4
+[16-Apr-2026 10:21:20 Asia/Jakarta] [Push] Success: https://fcm.googleapis.com/fcm/send/c_birHCXCKw:APA91bHpdMa5DY1zZZ7h5n40X69tO8n3bUjOFsRkScSTpqKLJfCzhyDhWfX6jOhrY4UOGxkvrh66MnQtYAFeiF63UnZaNpeSsX7c_VN_9GTwT76G2XvIr7s-Rd8jaCKqWICttq64MuNb
+[16-Apr-2026 10:21:20 Asia/Jakarta] [Push] Success: https://fcm.googleapis.com/fcm/send/fmUgO4AL9Vw:APA91bGHnhuN40jNA8-jmnjk8-tXkmvaXoxza2IvGX-DNZB7zNBjhorr001WBwsj5fqEvRcEBvOomW5h3ThKFBqiAKhUBTIecpP2zVDi0iUBrgkS14r-DiyHbvhzl2Yh_gmiv3L88ltW
+[16-Apr-2026 10:21:20 Asia/Jakarta] [Push] Success: https://updates.push.services.mozilla.com/wpush/v2/gAAAAABpxjyep0TvNODEe2yUW5NrrGss_aC0OrH68vmRlb9F4LfJ1MDCkBJf8aF8ea27p4EI3htmMqJrAD9EgJ2tE6HS5Jtf_LymCrrtfJiGLFQdeJ-CbLzWWHrAAFyzvpC74K_zNSITFRrwSVlYa2-r81iv2tlPOzc_WvsKeiAEJx2Skd003yg
+[16-Apr-2026 10:21:20 Asia/Jakarta] [Push] Success: https://fcm.googleapis.com/fcm/send/eTa_0Cs8SSs:APA91bElIUwUvhxHeKQif7lWS3EP5-7dwofX_HGACw72Gq2TPxh82LmPzzVsUraoVJnpZfSSFAAip3dd0WanSlxiYh8kilrWS9roJgIwfzv6gCKu0K6LBWdWdvAlaRpF1WTqRORAfLKM

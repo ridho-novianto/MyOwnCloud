@@ -91,9 +91,15 @@ $allTasks = $tasks->fetchAll();
                     <span class="badge badge-<?= $task['status'] ?>"><?= strtoupper(str_replace('_', ' ', $task['status'])) ?></span>
                     <span class="badge badge-priority-<?= $task['priority'] ?>"><?= strtoupper($task['priority']) ?></span>
                     <?php if ($task['deadline']): ?>
-                        <span class="deadline-tag <?= deadlineClass($task['deadline']) ?>">
-                            <i class="fas fa-calendar-alt"></i> <?= deadlineLabel($task['deadline']) ?>
-                        </span>
+                        <?php if (in_array($task['status'], ['done', 'cancelled'])): ?>
+                            <span class="deadline-tag safe">
+                                <i class="fas fa-calendar-check"></i> <?= date('d M Y', strtotime($task['deadline'])) ?>
+                            </span>
+                        <?php else: ?>
+                            <span class="deadline-tag <?= deadlineClass($task['deadline']) ?>">
+                                <i class="fas fa-calendar-alt"></i> <?= deadlineLabel($task['deadline']) ?>
+                            </span>
+                        <?php endif; ?>
                     <?php endif; ?>
                     <?php if ($task['tags']): ?>
                         <?php foreach (explode(',', $task['tags']) as $tag): ?>

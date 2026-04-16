@@ -7,10 +7,10 @@
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <script src="<?= APP_URL ?>/assets/js/app.js"></script>
+    <script src="<?= APP_URL ?>/assets/js/app.js?v=5"></script>
     <?php if (isset($pageScripts)): ?>
         <?php foreach ($pageScripts as $script): ?>
-        <script src="<?= APP_URL ?>/assets/js/<?= $script ?>"></script>
+        <script src="<?= APP_URL ?>/assets/js/<?= $script ?>?v=5"></script>
         <?php endforeach; ?>
     <?php endif; ?>
 </body>

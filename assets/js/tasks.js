@@ -53,7 +53,27 @@ async function saveTask(e) {
         if (res.success) {
             showToast(id ? 'Task diperbarui' : 'Task ditambahkan');
             closeModal();
-            location.reload();
+            
+            // The server already sends a real Web Push notification when creating a task with deadline.
+            // This client-side notification is a fallback for the current browser tab.
+            if (!id && data.deadline) {
+                const deadlineDate = new Date(data.deadline);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const diffDays = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
+                
+                // Show via Service Worker for reliability (works even on mobile)
+                if (typeof showBrowserNotification === 'function') {
+                    await showBrowserNotification(
+                        '✅ Tugas Baru Dibuat',
+                        `Task "${data.title}" - Deadline: ${data.deadline} (${diffDays} hari lagi)`,
+                        'new-task-' + Date.now()
+                    );
+                }
+            }
+            
+            // Wait a bit longer to ensure notification is shown before page reload
+            setTimeout(() => location.reload(), 1200);
         } else {
             showToast(res.error || 'Gagal menyimpan', 'error');
         }

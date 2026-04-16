@@ -23,7 +23,7 @@ define('SESSION_LIFETIME', 86400 * 7); // 7 days
 // VAPID keys for Push Notifications (generate your own at https://vapidkeys.com/)
 define('VAPID_PUBLIC_KEY', 'BGefBrMaoqJrXemyE4qPfVffptwENjK0iLYH7C9FOtufgwNpojmPuCmzcUele46ur3r5t9a2BdRNCNpC6JPykuc');
 define('VAPID_PRIVATE_KEY', '8xuwE5_XDTtnwaRU3PMjdPpPFI9DRAV9uAQLfgQ0_54');
-define('VAPID_SUBJECT', 'mailto:admin@myowncloud.local');
+define('VAPID_SUBJECT', 'mailto:admin@kuliah.vianto06.my.id');
 
 // Timezone
 date_default_timezone_set('Asia/Jakarta');

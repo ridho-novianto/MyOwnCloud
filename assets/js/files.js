@@ -326,7 +326,8 @@ const CONVERT_FORMATS = {
         { value: 'webp', label: 'Gambar WebP (.webp)' }
     ],
     document: [
-        { value: 'pdf', label: 'PDF Document (.pdf)' }
+        { value: 'pdf', label: 'PDF Document (.pdf)' },
+        { value: 'docx', label: 'Word Document (.docx)' }
     ]
 };
 

@@ -247,7 +247,7 @@ if ($method === 'POST') {
         $id = (int)($input['id'] ?? 0);
         $format = preg_replace('/[^a-z0-9]/', '', strtolower($input['format'] ?? ''));
 
-        $supportedFormats = ['mp3', 'mp4', 'wav', 'webm', 'ogg', 'aac', 'pdf', 'jpg', 'png', 'webp'];
+        $supportedFormats = ['mp3', 'mp4', 'wav', 'webm', 'ogg', 'aac', 'pdf', 'jpg', 'png', 'webp', 'docx'];
         if (!in_array($format, $supportedFormats)) {
             jsonResponse(['error' => 'Format tidak didukung: ' . $format], 400);
         }
@@ -359,7 +359,7 @@ if ($method === 'POST') {
                 imagedestroy($srcImg);
             }
         }
-        // --- Document to PDF (LibreOffice) ---
+        // --- Document Converter (LibreOffice) ---
         elseif (in_array($mime, [
             'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -367,8 +367,9 @@ if ($method === 'POST') {
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'application/vnd.ms-powerpoint',
             'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-            'text/plain', 'text/csv'
-        ]) && $format === 'pdf') {
+            'text/plain', 'text/csv',
+            'application/pdf'
+        ]) && in_array($format, ['pdf', 'docx'])) {
             $loPath = trim(shell_exec('which libreoffice 2>/dev/null') ?? '');
             if (!$loPath) {
                 jsonResponse(['error' => 'LibreOffice belum terinstall di server. Jalankan: sudo apt install libreoffice-common'], 500);
@@ -381,13 +382,17 @@ if ($method === 'POST') {
             $tmpSrc = $tmpDir . '/' . basename($file['original_name']);
             copy($srcPath, $tmpSrc);
 
-            $cmd = escapeshellarg($loPath) . " --headless --convert-to pdf --outdir " . escapeshellarg($tmpDir) . " " . escapeshellarg($tmpSrc) . " 2>&1";
+            $cmd = escapeshellarg($loPath) . " --headless";
+            if ($mime === 'application/pdf' && $format === 'docx') {
+                $cmd .= " --infilter=\"writer_pdf_import\"";
+            }
+            $cmd .= " --convert-to " . escapeshellarg($format) . " --outdir " . escapeshellarg($tmpDir) . " " . escapeshellarg($tmpSrc) . " 2>&1";
             exec($cmd, $output, $returnVar);
 
-            // Find the generated PDF
-            $pdfFile = $tmpDir . '/' . pathinfo($file['original_name'], PATHINFO_FILENAME) . '.pdf';
-            if (file_exists($pdfFile)) {
-                rename($pdfFile, $destPath);
+            // Find the generated document
+            $genFile = $tmpDir . '/' . pathinfo($file['original_name'], PATHINFO_FILENAME) . '.' . $format;
+            if (file_exists($genFile)) {
+                rename($genFile, $destPath);
                 $success = true;
             }
 

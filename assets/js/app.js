@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Filter tabs
     document.querySelectorAll('.filter-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
+        tab.addEventListener('click', function () {
             const parent = this.closest('.filter-tabs, .file-filters');
             parent.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
             this.classList.add('active');
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         let timeout;
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener('input', function () {
             clearTimeout(timeout);
             timeout = setTimeout(() => searchItems(this.value), 300);
         });
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Filter items based on data attributes
 function filterItems(filter) {
     const page = new URLSearchParams(window.location.search).get('page');
-    
+
     if (page === 'tasks') {
         document.querySelectorAll('.task-item').forEach(item => {
             if (filter === 'all') {
@@ -95,7 +95,7 @@ function filterItems(filter) {
 function searchItems(query) {
     query = query.toLowerCase();
     const page = new URLSearchParams(window.location.search).get('page');
-    
+
     if (page === 'tasks') {
         document.querySelectorAll('.task-item').forEach(item => {
             const text = item.textContent.toLowerCase();
@@ -132,7 +132,7 @@ function closeModal() {
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
-    
+
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
     const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
@@ -155,7 +155,7 @@ async function handleLogout(e) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'logout' })
         });
-    } catch(err) {}
+    } catch (err) { }
     window.location.href = APP_URL + '/?page=login';
 }
 
@@ -167,7 +167,7 @@ async function testNotification() {
                 // Use Service Worker showNotification (works on mobile)
                 let registration = await navigator.serviceWorker.getRegistration();
                 if (!registration) {
-                    registration = await navigator.serviceWorker.register(APP_URL + '/sw.js?v=3');
+                    registration = await navigator.serviceWorker.register(APP_URL + '/sw.js?v=5');
                     await navigator.serviceWorker.ready;
                 }
                 await registration.showNotification('MyOwnCloud', {
@@ -201,4 +201,79 @@ async function apiCall(endpoint, data) {
         body: JSON.stringify(data)
     });
     return res.json();
+}
+
+// Background Notification System
+// Replaces cron-based approach (cron URL is blocked by nginx security rules)
+document.addEventListener('DOMContentLoaded', () => {
+    // Run on page load after short delay
+    setTimeout(runNotificationCycle, 3000);
+    
+    // Run every 4 hours (server-side push handles immediate delivery)
+    setInterval(runNotificationCycle, 4 * 60 * 60 * 1000);
+});
+
+async function runNotificationCycle() {
+    try {
+        // Step 1: Trigger server-side deadline check (creates notification records in DB)
+        await apiCall('notifications', { action: 'trigger_check' });
+        
+        // Step 2: Fetch any pending (unread) notifications
+        const res = await apiCall('notifications', { action: 'get_pending' });
+        if (!res.success || !res.notifications || res.notifications.length === 0) return;
+        
+        // Step 3: Show them as browser notifications
+        const shownIds = [];
+        for (const notif of res.notifications) {
+            const shown = await showBrowserNotification(
+                notif.message.includes('terlambat') ? '⚠️ Task Terlambat!' : '📋 Deadline Reminder',
+                notif.message,
+                'deadline-' + (notif.task_id || notif.id)
+            );
+            if (shown) shownIds.push(notif.id);
+        }
+        
+        // Step 4: Mark shown notifications as read so they don't re-appear
+        if (shownIds.length > 0) {
+            await apiCall('notifications', { action: 'mark_shown', ids: shownIds });
+        }
+    } catch (e) {
+        console.log('[NotifCycle] Error:', e);
+    }
+}
+
+async function showBrowserNotification(title, body, tag) {
+    if (!('Notification' in window)) return false;
+    
+    if (Notification.permission !== 'granted') {
+        // Don't ask for permission automatically — user must enable via Notifications page
+        return false;
+    }
+    
+    try {
+        let registration = await navigator.serviceWorker.getRegistration();
+        if (!registration) {
+            registration = await navigator.serviceWorker.register(APP_URL + '/sw.js?v=5');
+            await navigator.serviceWorker.ready;
+        }
+        
+        await registration.showNotification(title, {
+            body: body,
+            icon: APP_URL + '/assets/icons/icon-192.png',
+            badge: APP_URL + '/assets/icons/icon-72.png',
+            vibrate: [200, 100, 200],
+            tag: tag || 'myowncloud-' + Date.now(),
+            renotify: true,
+            requireInteraction: true,
+            data: { url: APP_URL + '/?page=tasks' },
+            actions: [
+                { action: 'open', title: 'Buka Tasks' },
+                { action: 'dismiss', title: 'Tutup' }
+            ]
+        });
+        return true;
+    } catch (e) {
+        console.log('[Notif] showNotification error:', e);
+        return false;
+    }
 }

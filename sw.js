@@ -1,17 +1,23 @@
 /**
- * MyOwnCloud Service Worker
- * Handles push notifications
+ * MyOwnCloud Service Worker v5
+ * Handles push notifications (both server-pushed and client-triggered)
  */
 
+const SW_VERSION = 'v5';
+
 self.addEventListener('install', event => {
+    console.log('[SW] Install', SW_VERSION);
     self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
+    console.log('[SW] Activate', SW_VERSION);
     event.waitUntil(clients.claim());
 });
 
 self.addEventListener('push', event => {
+    console.log('[SW] Push received');
+    
     let data = {
         title: 'MyOwnCloud',
         body: 'Anda memiliki notifikasi baru',
@@ -39,7 +45,7 @@ self.addEventListener('push', event => {
         requireInteraction: true,
         data: { url: data.url },
         actions: [
-            { action: 'open', title: 'Buka' },
+            { action: 'open', title: 'Buka Tasks' },
             { action: 'dismiss', title: 'Tutup' }
         ]
     };
@@ -58,7 +64,6 @@ self.addEventListener('notificationclick', event => {
 
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-            // we will just open a new window or focus the first one
             if (clientList.length > 0) {
                 let client = clientList[0];
                 if ('focus' in client) {

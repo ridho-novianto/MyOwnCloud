@@ -65,8 +65,22 @@ if ($method === 'POST') {
             $input['deadline'] ?: null,
             $input['tags'] ?? ''
         ]);
+        $taskId = $db->lastInsertId();
         logActivity($uid, 'task_create', "Created task: $title");
-        jsonResponse(['success' => true, 'id' => $db->lastInsertId()]);
+        
+        // Store notification in DB AND send real push notification if task has a deadline
+        if (!empty($input['deadline'])) {
+            $days = daysUntil($input['deadline']);
+            $message = "Task \"{$title}\" baru saja dibuat. Deadline dalam {$days} hari ({$input['deadline']})";
+            $db->prepare("INSERT INTO notifications (user_id, task_id, message) VALUES (?, ?, ?)")
+               ->execute([$uid, $taskId, $message]);
+            
+            // Send real Web Push notification to all devices immediately
+            require_once __DIR__ . '/../includes/push_helper.php';
+            sendTaskPushNotification($uid, (int)$taskId, $title, $input['deadline'], 'new');
+        }
+        
+        jsonResponse(['success' => true, 'id' => $taskId]);
     }
 
     if ($action === 'update') {
